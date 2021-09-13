@@ -1,0 +1,15 @@
+.idea
+node_modules
+.vscode
+.eslintrc.js
+.travis.yml
+appveyor.yml
+logs/
+run/
+test/app/
+test/cache/
+test/fixtures/
+test/model/
+test/rpc/
+test/services/
+test/utils/

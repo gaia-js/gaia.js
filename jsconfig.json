@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "ES6",
+    "module": "commonjs"
+  },
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "dist"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "gaia-test",
+  "version": "1.0.0",
+  "description": "",
+  "egg": {
+    "typescript": true,
+    "declarations": true,
+    "framework": "../../../"
+  },
+  "dependencies": {
+    "gaiajs": "file:../"
+  }
+}

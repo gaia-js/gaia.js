@@ -1,0 +1,38 @@
+common-response:
+  properties:
+    errorCode:
+      type: int
+      comment: 请求是否成功
+
+paths:
+  - name: AdminLogin
+    url: /admin/login
+    comment: 登录
+    method: get
+    parameters:
+      ticket:
+        type: string
+    response:
+      properties:
+
+  # - name: Ping
+  #   url: /ping
+  #   comment: 系统验活检查
+  #   method: get
+  #   response:
+  #     type: string
+
+  # - name: PingHealth
+  #   url: /ping/health
+  #   comment: 系统健康检查
+  #   method: get
+  #   response:
+  #     type: PingHealth
+
+# types:
+#   PingHealth:
+#     properties:
+#       result:
+#         type: string
+#       detail:
+#         type: PingHealth
