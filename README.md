@@ -24,7 +24,7 @@ gaia.js是基于[Egg.js][egg]的扩展框架，主要使用typescript开发。�
 ### 使用gaiajs脚手架搭建工程，参见 [egg 文档][egg]
 ```
 $ mkdir gaiajs-project && cd gaiajs-project
-$ npm init gaiajs --registry=http://npm.17zuoye.net
+$ npm init gaiajs
 $ npm i
 ```
 

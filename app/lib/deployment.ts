@@ -87,14 +87,4 @@ export default class Deployment {
   debugging(): boolean {
     return this.stage <= Stage.Dev
   }
-
-  hostnameOf(hostname: string, topDomain = 'com') {
-    this.app.assert(hostname, 'hostname should not be empty');
-    return this.isProduction() ? `${hostname}.17zuoye.${topDomain}` : (this.stage === Stage.Staging ? `${hostname}.staging.17zuoye.net` : `${hostname}.test.17zuoye.net`);
-  }
-
-  cdnHostnameOf(hostname: string) {
-    this.app.assert(hostname, 'hostname should not be empty');
-    return this.isProduction() ? `${hostname}.17zuoye.cn` : (this.stage === Stage.Staging ? `${hostname}.staging.17zuoye.net` : `${hostname}.test.17zuoye.net`);
-  }
 }

@@ -24,8 +24,6 @@ export default class SessionService extends BaseService {
     // await this.service.cache.redis.set(sid, session, { expires: 3600 });
 
     this.ctx.setCookie('sess_id', sid, { overwrite: true });
-    // TODO: 应该检查origin是否在.17zuoye.com下
-    this.ctx.get('origin') && this.ctx.secure && this.ctx.setCookie('sess_id', sid, { overwrite: false, sameSite: 'none' });
 
     return session;
   }
