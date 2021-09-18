@@ -1,10 +1,11 @@
 import { Agent as EggAgent } from 'egg';
 import * as path from 'path';
-
-const EGG_PATH = Symbol.for('egg#eggPath');
+import AgentWorkerLoader from './agent_loader';
 
 import { wrapLogger } from './logger';
 
+const EGG_PATH = Symbol.for('egg#eggPath');
+const EGG_LOADER = Symbol.for('egg#loader');
 const LOGGERS = Symbol('EggApplication#loggers');
 
 export default class Agent extends EggAgent {
@@ -29,5 +30,9 @@ export default class Agent extends EggAgent {
       this[ LOGGERS ] = loggers;
     }
     return this[ LOGGERS ];
+  }
+
+  get [EGG_LOADER]() {
+    return AgentWorkerLoader;
   }
 }

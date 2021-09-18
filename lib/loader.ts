@@ -127,6 +127,8 @@ export default class AppWorkerLoader extends EggAppWorkerLoader {
     this.loadObject();
 
     this.loadGrpc();
+
+    this.loadCustomLoaders();
   }
   loadModel() {
     throw new Error('Method not implemented.');
@@ -142,10 +144,6 @@ export default class AppWorkerLoader extends EggAppWorkerLoader {
 
     this.app.config.logger.disableConsoleAfterReady = !this.app.deployment || !this.app.deployment.developing();
   }
-
-  // loadPlugin() {
-  //   super.loadPlugin();
-  // }
 
   loadRouter() {
     this.loadPassport();
@@ -207,6 +205,26 @@ export default class AppWorkerLoader extends EggAppWorkerLoader {
       }, ...(opt || {})});
 
     this.app.gaiaMiddlewares = gaiaMiddlewares;
+  }
+
+  loadCustomLoaders() {
+    const opt = {
+      inject: this.app,
+      override: true,
+      directory: this.getLoadUnits().filter(unit => unit.type === 'gaia-plugin').map(unit => path.join(unit.path, 'lib/loaders'))
+    };
+
+    if (opt.directory) {
+      this.app.loader.loadToApp(opt.directory, '', {
+        ...opt,
+        filter: func => {
+          return typeof func === 'function';
+        },
+        initializer: (func, options) => {
+          func.call(this, options);
+        },
+      });
+    }
   }
 }
 
