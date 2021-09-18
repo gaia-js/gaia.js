@@ -49,10 +49,10 @@ export default class KafkaProducerService extends BaseService {
       this.ctx.logInfo({ type: 'kafka_producer', msg: 'kafka producer message sent', detail: { brokerName, messages } });
 
       return true;
-    } catch (err: any) {
+    } catch (err) {
       this.service.profiler.addItem('error', { type: 'kafka', operator: 'produce' });
 
-      this.ctx.logCritical({ type: 'kafka_producer', msg: 'kafka producer failed to send message', detail: { error: err, brokerName, messages } }, err);
+      this.ctx.logCritical({ type: 'kafka_producer', msg: 'kafka producer failed to send message', err, detail: { error: err, brokerName, messages } });
 
       return false;
     }

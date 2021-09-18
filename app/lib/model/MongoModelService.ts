@@ -1,6 +1,6 @@
 import { Context } from 'egg';
 import { ObjectID } from 'mongodb';
-import { Document, Model, UpdateQuery, FilterQuery } from 'mongoose';
+import { Document, Model, UpdateQuery, FilterQuery, Mongoose, Connection } from 'mongoose';
 import { MongooseSingleton } from '../../../typings/app';
 import * as _ from 'lodash';
 
@@ -185,7 +185,10 @@ export default class MongoModelService<T extends BaseBSONDocObject<KT>, KT = Key
       const collection: string = this.option('collection')!;
       this.app.assert(collection, 'collection should be specified');
 
-      const connection = dbName && (this.app.mongooseDB as MongooseSingleton).get ? (this.app.mongooseDB as MongooseSingleton).get(dbName) : this.app.mongoose.connection;
+      const mongooseDB = (this.app as any).mongooseDB as MongooseSingleton;
+      const mongoose = (this.app as any).mongoose as Mongoose;
+
+      const connection = dbName && mongooseDB.get ? mongooseDB.get(dbName) as Connection : mongoose.connection;
 
       if (!(this.app as any)._mongoModelCache) {
         (this.app as any)._mongoModelCache = {};
@@ -195,7 +198,7 @@ export default class MongoModelService<T extends BaseBSONDocObject<KT>, KT = Key
       if (!model) {
         model = (this.app as any)._mongoModelCache[`${dbName || 'default'}.${collection}`] = connection.model(
           this.constructor.prototype.pathName || this.constructor.name,
-          new this.app.mongoose.Schema(
+          new mongoose.Schema(
             schema,
             {
               timestamps: true,
@@ -204,7 +207,7 @@ export default class MongoModelService<T extends BaseBSONDocObject<KT>, KT = Key
             }
           ),
           collection
-        );
+        ) as any;
       }
     }
 

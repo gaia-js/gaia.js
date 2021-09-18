@@ -102,11 +102,11 @@ export default class Task<TKeyType = any> extends EventEmitter {
   async run(ctx: Context) {
     try {
       this.result = await this.exec(ctx);
-    } catch (err: any) {
+    } catch (err) {
       this.status = TaskStatus.Error;
       this.error = err as Error;
 
-      ctx.logError({ msg: `task ${this.name}(${this.id}) execution failed: ${err.message}`, detail: { progress: this.progress }}, err)
+      ctx.logError({ msg: `task ${this.name}(${this.id}) execution failed`, err, detail: { progress: this.progress }})
       this.emit(TaskEvent.error, err, this);
     } finally {
       if (this.status === TaskStatus.Running) {

@@ -182,12 +182,12 @@ export default class SequelizeModelService<T extends BaseModelObject<KT>, KT = K
     throw new Error('schema not specified');
   }
 
-  get indexes(): ModelIndexesOptions[] {
-    return [];
-  }
-
   get modelOptions(): ModelOptions | undefined {
     return undefined;
+  }
+
+  get indexes(): ModelIndexesOptions[] {
+    return [];
   }
 
   async findOrCreate(values: ObjectProperties<T>, where: WhereOptions): Promise<T> {

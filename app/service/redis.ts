@@ -51,8 +51,8 @@ class RedisService extends BaseService {
         if (expire && !(await redis.expire(key, expire))) {
           this.ctx.logNotice({ msg: 'set expire failed', detail: { key, expire } });
         }
-      } catch (err: any) {
-        this.ctx.logNotice({ msg: 'set expire failed', detail: { key, expire } }, err);
+      } catch (err) {
+        this.ctx.logNotice({ msg: 'set expire failed', err, detail: { key, expire } });
       }
 
       try {

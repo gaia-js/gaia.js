@@ -1,9 +1,9 @@
-import { BaseCacheService, CacheRepository, CacheSetOptions } from "../../lib/BaseCacheService";
-import { Context } from "egg";
+import { BaseCacheService, CacheRepository, CacheSetOptions } from '../../lib/BaseCacheService';
+import { Context } from 'egg';
 import * as Memcached from 'memcached';
 
 function getRepository(ctx: Context) {
-  async function prepareMemcached(): Promise<any> {
+  function prepareMemcached() {
     const memcached = ctx.app.memcached;
 
     if (!memcached) {
@@ -36,8 +36,9 @@ function getRepository(ctx: Context) {
       return !!(ctx.app.config.cache?.memcached && ctx.app.memcached);
     }
 
+    // tslint:disable-next-line: no-reserved-keywords
     async get(key: string): Promise<any> {
-      return await new Promise<void>((resolve, reject) => {
+      return await new Promise<any>((resolve, reject) => {
         const item = ctx.service.profiler.createItem('memcached', { operation: 'get' });
 
         ctx.app.memcached.get(key, (err: Error, data: any) => {
@@ -57,10 +58,11 @@ function getRepository(ctx: Context) {
       });
     }
 
+    // tslint:disable-next-line: no-reserved-keywords
     async set(key: string, value: any, options: CacheSetOptions = {}): Promise<void> {
-      return await new Promise<void>((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         const item = ctx.service.profiler.createItem('memcached', { operation: 'set' });
-        ctx.app.memcached.set(key, value, { expiry: (options && options.expires) || 3600 }, function(err: Error, result: any) {
+        ctx.app.memcached.set(key, value, { expiry: (options && options.expires) || 3600 }, (err: Error, result: any) => {
 
           if (item.last() > 100) {
             item.addTag('timeout', 'timeout');
@@ -78,7 +80,7 @@ function getRepository(ctx: Context) {
     }
 
     async remove(key: string): Promise<void> {
-      return await new Promise<void>((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         const item = ctx.service.profiler.createItem('memcached', { operation: 'remove' });
         ctx.app.memcached.del(key, (err: Error, result: any) => {
 

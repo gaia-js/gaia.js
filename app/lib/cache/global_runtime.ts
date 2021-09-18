@@ -16,7 +16,7 @@ const hostname = os.hostname();
 
 export default class GlobalRuntimeRepository extends RuntimeRepository {
   protected app: Application;
-  redis: Redis
+  redis: Redis;
 
   constructor(app: Application, options?: RuntimeRepositoryOptions, logger?: Logger) {
     super(logger);
@@ -32,7 +32,7 @@ export default class GlobalRuntimeRepository extends RuntimeRepository {
     this.app.assert(this.app.redis, 'should has redis');
 
     // publish的连接需要与subscribe的连接分开
-    this.redis = this.app.getRedis();
+    this.redis = this.app.getRedis() as Redis;
   }
 
   async set(key: string, value: any) {

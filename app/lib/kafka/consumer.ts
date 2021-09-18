@@ -188,8 +188,8 @@ class Consumer {
 
       try {
         await this.worker.waitFinished(5000);
-      } catch (err: any) {
-        this.app.logger.error({ level: 'NOTICE', type: 'kafka_consumer', msg: `kafka consumer '${this.name}' finish: ${err.message}` }, err);
+      } catch (err) {
+        this.app.logger.error({ level: 'NOTICE', type: 'kafka_consumer', msg: `kafka consumer '${this.name}' stopped with error`, err });
       }
     }
   }
@@ -227,8 +227,8 @@ class Consumer {
       await ctx.service.kafkaConsumer.handle(kafkaMessageValue, message.topic, this.name);
 
       await ctx.event.fire(eventName(this.name, message.topic), kafkaMessageValue, message.topic, this.name);
-    } catch (err: any) {
-      ctx.logCritical({ type: 'kafka_consumer-error', ...logValue, msg: 'handle kafka message failed', detail: { message, consumer: this.config } }, err);
+    } catch (err) {
+      ctx.logCritical({ type: 'kafka_consumer-error', ...logValue, msg: 'handle kafka message failed', err, detail: { message, consumer: this.config } });
     } finally {
       if (profileItem.last() > 1000) {
         profileItem.addTag('timeout', 'timeout');

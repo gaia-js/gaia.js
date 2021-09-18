@@ -28,6 +28,7 @@ class RedisCache implements CacheRepository {
     return ((this.ctx.app.redis as any).clients && (this.ctx.app.redis as any).clients.get('default')) || this.ctx.app.redis;
   }
 
+  // tslint:disable-next-line: no-reserved-keywords
   async get(key: string) {
     const item = this.ctx.service.profiler.createItem('redis', { operation: 'get' });
 
@@ -42,7 +43,7 @@ class RedisCache implements CacheRepository {
     try {
       return JSON.parse(res);
     } catch (err) {
-      this.ctx.logError({ msg: 'unserialize faild', err, detail: { key, res } });
+      this.ctx.logError({ msg: 'deserialize failed', err, detail: { key, res } });
       return undefined;
     }
   }
@@ -65,8 +66,8 @@ class RedisCache implements CacheRepository {
         if (value !== null) {
           try {
             ret.set(keys[index], JSON.parse(value));
-          } catch (err: any) {
-            this.ctx.logError({ msg: 'unserialize faild', err, detail: { key: keys[index], value } });
+          } catch (err) {
+            this.ctx.logError({ msg: 'deserialize failed', err, detail: { key: keys[index], value } });
             // omit
           }
         }
@@ -75,6 +76,7 @@ class RedisCache implements CacheRepository {
     return ret;
   }
 
+  // tslint:disable-next-line: no-reserved-keywords
   async set(key: string, value: any, options: CacheSetOptions = {}) {
     const item = this.ctx.service.profiler.createItem('redis', { operation: 'setex' });
 

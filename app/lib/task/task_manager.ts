@@ -105,8 +105,8 @@ export default class TaskManager extends EventEmitter {
     this.redisEventSubscriber.once('ready', async () => {
       try {
         await this.redisEventSubscriber.psubscribe('task_event.*');
-      } catch (err: any) {
-        this.app.logger.error({ level: 'CRIT', msg: 'cannot start task manager for redis pub/sub error', err })
+      } catch (err) {
+        this.app.logger.error({ level: 'CRIT', err, msg: 'cannot start task manager for redis pub/sub error' })
       }
     });
   }

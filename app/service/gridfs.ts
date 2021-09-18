@@ -5,17 +5,24 @@ import { basename } from 'path';
 import * as md5 from 'md5';
 import * as fs from 'fs';
 import { randomString } from '../lib/string';
-import { MongooseSingleton } from '../../typings/app';
+import { MongooseSingleton } from 'egg';
 import { Connection } from 'mongoose';
+import { ServerError } from '../errors';
 
 export default class GridFSService extends BaseService {
   private async getClient(dbName?: string, conn?: string) {
-    if (!conn && this.app.mongooseDB && (this.app.mongooseDB as MongooseSingleton).clients) {
-      conn = [...(this.app.mongooseDB as MongooseSingleton).clients.keys()][0];
+    const mongooseDB = (this.app as any).mongooseDB as MongooseSingleton | Connection;
+
+    if (!mongooseDB) {
+      throw new ServerError({ msg: '系统错误' })
+    }
+
+    if (!conn && mongooseDB && (mongooseDB as MongooseSingleton).clients) {
+      conn = [...(mongooseDB as MongooseSingleton).clients.keys()][0];
       conn = 'default';
     }
 
-    const connection: Connection = conn ? (this.app.mongooseDB as MongooseSingleton).get(conn) as Connection : this.app.mongooseDB as Connection;
+    const connection: Connection = conn ? (mongooseDB as MongooseSingleton).get(conn) as Connection : mongooseDB as Connection;
     const db = dbName ? connection.useDb(dbName) : connection;
     return new mongodb.GridFSBucket(db.db as any);
   }
@@ -59,8 +66,8 @@ export default class GridFSService extends BaseService {
           resolve();
         });
       });
-    } catch (err: any) {
-      this.ctx.logCritical({ type: 'oss', msg: 'cannot put file', detail: { err, filePath, fileName } }, err);
+    } catch (err) {
+      this.ctx.logCritical({ type: 'oss', msg: 'cannot put file', err, detail: { filePath, fileName } });
       throw err;
     }
 

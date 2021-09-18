@@ -4,7 +4,7 @@ import { Collection, FilterQuery, Schema, UpdateQuery } from 'mongoose';
 import BaseBSONDocObject from '../../object/BaseBSONDocObject';
 import { ObjectProperties } from '../../object/BasePropertiesObject';
 import { CreateOptions } from './DBModelService';
-import { SchemaDefinition } from 'mongoose';
+import { SchemaDefinition, Schema as MongooseSchema } from 'mongoose';
 
 export interface DynamicMongoCollectionResolver<KT = KeyType, TObj extends BaseBSONDocObject<KT> = BaseBSONDocObject<KT>> {
   resolveById(id: KT, dao?: DynamicMongoDao<KT, TObj>): Collection;
@@ -38,11 +38,11 @@ class DynamicMongoDao<KT = KeyType, TObj extends BaseBSONDocObject<KT> = BaseBSO
     }
 
     if (!(app as any)._mongoModelCache[key]) {
-      const Schema = app.mongoose.Schema;
+      const Schema = (app as any).mongoose.Schema as typeof MongooseSchema;
 
       (app as any)._mongoModelCache[key] = collection.conn.model(
         key/* collection.name */,
-        this.schema instanceof app.mongoose.Schema ? this.schema : new Schema(
+        this.schema instanceof Schema ? this.schema : new Schema(
           this.schema,
           {
             timestamps: true,

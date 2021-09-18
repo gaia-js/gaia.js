@@ -149,7 +149,7 @@ export class HttpRpcInvoker<TRequestOptions extends RequestOptions = RequestOpti
     return log;
   }
 
-  // tslint:disable-next-line: cyclomatic-complexity
+  // tslint:disable-next-line: cyclomatic-complexity max-func-body-length
   async invoke<T = any>(params?: any): Promise<IApiResult<T>> {
     const headers: { [ name: string ]: string | string[] } = {};
     for (const name of Object.keys(this.ctx.headers)) {
@@ -220,7 +220,10 @@ export class HttpRpcInvoker<TRequestOptions extends RequestOptions = RequestOpti
         }, ...options});
 
       if (res.status < 200 || res.status >= 300) {
-        this.ctx.logCritical({ type: `${this._call_name}_call-error`, msg: `invalid ${this._call_name}_call/${this._name} result (${res.status}: ${res.res?.statusMessage})`, detail: this.logFilter({ url, params, res: res.res, data: res.data }) });
+        this.ctx.logCritical({
+          type: `${this._call_name}_call-error`,
+          msg: `invalid ${this._call_name}_call/${this._name} result (${res.status}: ${res.res?.statusMessage})`,
+          detail: this.logFilter({ url, params, res: res.res, data: res.data }) });
 
         throw new ApiError(`${this._call_name}_call/${this._name} ${urlForLog} returns ${res.status}`, res);
       }
@@ -229,15 +232,21 @@ export class HttpRpcInvoker<TRequestOptions extends RequestOptions = RequestOpti
       result.httpResult = res;
 
       if (!res.data || ((!options || !options.dataType || options.dataType === 'json') && typeof res.data !== 'object')) {
-        this.ctx.logError({ type: `${this._call_name}_call-error`, msg: `${this._call_name}_call/${this._name} (${urlForLog}) returns invalid data`, detail: this.logFilter({ url, params, res: res.res, data: res.data }) });
+        this.ctx.logError({
+          type: `${this._call_name}_call-error`,
+          msg: `${this._call_name}_call/${this._name} (${urlForLog}) returns invalid data`,
+          detail: this.logFilter({ url, params, res: res.res, data: res.data }) });
       } else if (!result?.success) {
-        this.ctx.logError({ type: `${this._call_name}_call-error`, msg: `${this._call_name}_call/${this._name} (${urlForLog}) returns false: ${result?.errorInfo}`, detail: this.logFilter({ url, params, res: res.res, data: res.data }) });
+        this.ctx.logError({
+          type: `${this._call_name}_call-error`,
+          msg: `${this._call_name}_call/${this._name} (${urlForLog}) returns false: ${result?.errorInfo}`,
+          detail: this.logFilter({ url, params, res: res.res, data: res.data }) });
       }
 
       return result as IApiResult<T>;
-    } catch (err: any) {
+    } catch (err) {
       if (!(err instanceof ApiError)) {
-        this.ctx.logCritical({ type: `${this._call_name}_call-error`, msg: `failed to call ${this._call_name}/${this._name} ${urlForLog}: ${err.message}`, detail: { url, params } }, err);
+        this.ctx.logCritical({ type: `${this._call_name}_call-error`, msg: `failed to call ${this._call_name}/${this._name} ${urlForLog}`, err, detail: { url, params } });
       }
 
       throw err;
@@ -246,6 +255,7 @@ export class HttpRpcInvoker<TRequestOptions extends RequestOptions = RequestOpti
 }
 
 export default class HttpService extends BaseService {
+  // tslint:disable-next-line: no-reserved-keywords
   async get(api: string, params?: any, options?: RequestOptions) {
     return await this.invoker(api).method('GET').options(options).invoke(params);
   }
