@@ -6,7 +6,6 @@ import { IKafkaMessageConsumerOptions } from './kafka/consumer';
 import ObjectProfiler from './object_profiler';
 import { deepFindObject } from './obj_util';
 import { createClient } from './redis';
-import * as assert from 'assert';
 
 declare global {
   namespace NodeJS {
@@ -138,7 +137,7 @@ export class Bootstrap {
         try {
           const ctx = this.app.createAnonymousContext({
             origin: '',
-            protocol: 'hydra',
+            protocol: 'pubsub',
             method: 'POST',
             host: '',
             hostname: '',
@@ -171,7 +170,7 @@ export class Bootstrap {
   profiler(options?: Partial<{ name?: string; tags?: { [key: string]: string; }; timeout: number }>) {
     return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
       const oldValue = target[propertyKey];
-      assert(typeof oldValue === 'function', 'profiler target should be a function');
+      this.app.assert(typeof oldValue === 'function', 'profiler target should be a function');
       Object.defineProperty(target, propertyKey, {
         configurable: true,
         value: function(...args: any[]) {

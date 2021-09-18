@@ -51,19 +51,23 @@ export class BaseCacheService extends BaseService implements CacheRepository {
     return this.cacheRepository.available();
   }
 
+  // tslint:disable-next-line: no-reserved-keywords
   async get(key: string, options?: CacheOptions): Promise<any> {
     return await this.cacheRepository.get(key, options);
   }
 
+  // tslint:disable-next-line: no-reserved-keywords
   async set(key: string, value: any, options?: CacheSetOptions): Promise<void> {
     return await this.cacheRepository.set((options && options.prefix ? options.prefix : '') + key, value, { expires: options && options.expires || 600, ...(options && options.serializeType ? { serializeType: options.serializeType } : {}), ...(options && options.repository ? { repository: options && options.repository } : {}) });
   }
 
   async remove(key: string, options?: CacheOptions) {
-    return await this.cacheRepository.remove(key, options);
+    await this.cacheRepository.remove(key, options);
   }
 
   async mget(keys: string[], options?: CacheOptions): Promise<Map<string, any>> {
+    this.ctx.assert(Array.isArray(keys), 'keys should be array to mget');
+
     const results: any[] = await Promise.all(keys.map(key => this.get(key, options)));
 
     const res = new Map<string, any>();
