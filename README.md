@@ -129,8 +129,8 @@ cache模块提供了一个cache pool chain，用于`本地runtime缓存`->`couch
 我们可以把我们的路由处理放在app/routers/下，按照路径规则放置就行。
 例如`app/routers/ping.ts`：
 ```
-import GaiaResponse from 'egg-gaiajs/lib/response';
-import { RouteableModule } from 'egg-gaiajs/app/lib/router/routers';
+import GaiaResponse from '@gaiajs/gaiajs/lib/response';
+import { RouteableModule } from '@gaiajs/gaiajs/app/lib/router/routers';
 
 export default async function(this: RouteableModule) {
   const response = new GaiaResponse(this.ctx.app.name);
@@ -185,7 +185,7 @@ export default function() {
 或
 ```
 
-import bootstrap from 'egg-gaiajs/app/lib/bootstrap';
+import bootstrap from '@gaiajs/gaiajs/app/lib/bootstrap';
 
 export default class MyService {
   @bootstrap.event(<event>)

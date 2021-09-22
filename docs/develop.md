@@ -10,7 +10,7 @@ npm i egg-core -g
 git clone git@github.com:rockyzh/gaia.js.git
 
 cd gaia.js
-ln -s (pwd) (npm root -g)/egg-gaiajs
+ln -s (pwd) (npm root -g)/@gaiajs/gaiajs
 
 npm link egg-core
 ```
@@ -18,5 +18,5 @@ npm link egg-core
 
 ## 配置项目
 ```
-npm link egg-core egg-gaiajs
+npm link egg-core @gaiajs/gaiajs
 ```
