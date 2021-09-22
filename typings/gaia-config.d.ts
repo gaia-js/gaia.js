@@ -129,12 +129,6 @@ declare module 'egg' {
       };
     } & { [topic: string]: any };
 
-    grpc?: {
-      address?: string;
-      port?: number;
-      disableServer?: boolean;
-    };
-
     adminPassports?: string[]; // 默认passport
     adminAuth?: string[]; // 开启的验证策略
 

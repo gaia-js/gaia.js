@@ -126,17 +126,12 @@ export default class AppWorkerLoader extends EggAppWorkerLoader {
 
     this.loadObject();
 
-    this.loadGrpc();
-
     this.loadCustomLoaders();
   }
   loadModel() {
     throw new Error('Method not implemented.');
   }
   loadObject() {
-    throw new Error('Method not implemented.');
-  }
-  loadGrpc() {
     throw new Error('Method not implemented.');
   }
   loadConfig() {
@@ -237,7 +232,6 @@ const loaders = [
   require('./loaders/model').default || require('./loaders/model'),
   require('./loaders/object').default || require('./loaders/object'),
   require('./loaders/passport').default || require('./loaders/passport'),
-  require('./loaders/grpc').default || require('./loaders/gprc'),
 ];
 
 for (const loader of loaders) {
