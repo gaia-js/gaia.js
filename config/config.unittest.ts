@@ -11,12 +11,6 @@ export default (appInfo: EggAppInfo) => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1565670102906_2966';
 
-  if (!config.hydra) {
-    config.hydra = {};
-  }
-
-  config.hydra.disableServer = true;
-
   return {
     ...config,
   };

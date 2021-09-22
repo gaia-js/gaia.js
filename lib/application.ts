@@ -59,11 +59,9 @@ export default class GaiaApplication extends EggApplication {
     let updateTimer;
     this.beforeStart(() => {
       if (!app.deployment.isProduction() && (app.config.debugger || app.config.env === 'local')) {
-        // debug.enable('gaia:*,hydra:*');
         if (typeof app.config.debugger === undefined || app.config.debugger) {
           debug.enable(app.config.debugger || 'gaia:*');
         }
-        // debug.enable('*,-hessian:*,-hydra:debug:*');
       }
 
       if (app.config.rhea) {

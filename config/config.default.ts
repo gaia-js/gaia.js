@@ -1,7 +1,6 @@
 import { EggAppConfig, PowerPartial, EggAppInfo } from 'egg';
 
 'use strict';
-import hydraServices from './hydra_rpc';
 import { BusinessError } from '../app/errors/index';
 
 
@@ -123,6 +122,5 @@ export default (appInfo: EggAppInfo) => {
 
   return {
     ...config,
-    hydraServices,
   };
 };

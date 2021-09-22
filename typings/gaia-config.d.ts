@@ -87,32 +87,6 @@ declare module 'egg' {
     };
 
     rpc: {
-      hydra: {
-        useHydraClient: boolean;
-        group: string;
-        agent_url?: string;
-      };
-
-      ditto: {
-        useDittoClient: boolean;
-        group: 'test' | 'staging' | 'production' | string;
-        agent_url?: string;
-      };
-
-      /**
-       * 使用hydra配置
-       * @deprecated
-       */
-      hydra_agent?: {
-        url: string;
-        group: string;
-      };
-
-      openapi: {
-        host: string;
-        app_key: string;
-        app_secret: string;
-      };
     } & { [ name: string ]: any };
 
     oss: OSSConfig;

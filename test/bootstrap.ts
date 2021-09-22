@@ -9,7 +9,7 @@ import mock from 'egg-mock';
 import { MockApplication } from 'egg-mock';
 
 const _debug = require('debug');
-_debug.enable('gaia:*,hydra:*');
+_debug.enable('gaia:*');
 
 export interface Options {
   baseDir: string;
@@ -31,8 +31,6 @@ export function prepare(options: Partial<Options> = {}) {
   }
 
   const app = _app;
-
-  // app.config.rpc.hydra.useHydraClient = (random() * 2) > 1;
 
   before(() => app.ready());
 

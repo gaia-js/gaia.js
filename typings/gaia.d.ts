@@ -43,7 +43,6 @@ declare module 'egg' {
     memcached?: Memcached;
     couchbase?: { [ name: string ]: Bucket };
     redis: Redis & Singleton<Redis> & { clients: Map<string, Redis & Singleton<Redis>> };
-    hydraClient: HydraClient;
 
     ossBucket: { [name: string]: OSS & OSSClient };
 
@@ -60,8 +59,6 @@ declare module 'egg' {
 
   interface Context extends ExtendContextType, Egg.Context {
     assert(value: any, msg?: string | undefined);
-
-    hydraRequest: HydraRequest;
 
     session: any;
   }

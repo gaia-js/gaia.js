@@ -10,7 +10,6 @@ const tsNode = require("ts-node");
 const utils = require('egg-utils');
 const is = require('is-type-of');
 
-// debug.enable('gaia:*,hydra:*');
 debug.enable('gaia:*');
 
 tsNode.register({
@@ -48,7 +47,6 @@ class Command extends BaseCommand {
       ignoreWarning: true,
       execArgv: context.execArgv,
       env: process.env.NODE_ENV,
-      disableHydraServer: true,
     }, argv);
     debug('%j, %j', options);
 
