@@ -120,7 +120,7 @@
     "clean": "./node_modules/egg-bin/bin/ets.js clean",
     "tsc": "npx ets && tsc --build tsconfig.json && tsc --build ./lib/tshelper/tsconfig.json",
     "build": "npm run tsc",
-    "pub": "rm -rf dist/ && npm run build && npm version patch && cp -Rf README.md tsconfig.json tslint.gaia.json tslint.json typings package.json index.* tshelper.js .npmignore bin ./dist/ && cp lib/tshelper.js ./dist/lib/ && cp -rf app/msggen dist/app/ && npm publish dist/ --registry=https://registry.npmjs.org/"
+    "pub": "rm -rf dist/ && npm run build && npm version patch && cp -Rf README.md tsconfig.json tslint.gaia.json tslint.json typings package.json index.* tshelper.js .npmignore bin ./dist/ && cp lib/tshelper.js ./dist/lib/ && cp -rf app/msggen dist/app/ && npm publish dist/ --access public --registry=https://registry.npmjs.org/"
   },
   "bin": {
     "script": "bin/run.js"
