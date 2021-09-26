@@ -12,7 +12,7 @@ export default class ErrorService extends BaseService {
     throw error instanceof BusinessError ? error : (this.createBusinessError(error));
   }
 
-  throwRequestValidateError(err: Error) {
+  throwRequestValidateError(err: Error | unknown) {
     throw this.createBusinessError({ ...ErrorCodes.PARAMETER, extra: err });
   }
 

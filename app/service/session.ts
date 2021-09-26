@@ -7,6 +7,7 @@ import Session from '../object/session';
  * @deprecated 可直接使用ctx.session，支持自动load和commit
  */
 export default class SessionService extends BaseService {
+  // tslint:disable-next-line: no-reserved-keywords
   async get(sessionId?: string) {
     let sid = sessionId || this.ctx.cookies.get('sess_id', { signed: false, encrypt: false }) || this.ctx.get('x-sess-id');
 
