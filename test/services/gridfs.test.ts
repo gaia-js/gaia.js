@@ -8,10 +8,10 @@ tester('test/services/gridfs.test.ts', async it => {
   it('put', async (ctx: Context) => {
     const srcContent = 'test content ' + await randomString(32);
 
-    const id = await ctx.service.gridfs.put(Buffer.from(srcContent), 'gaiajs.test_content.txt', { conn: 'gridfs' });
+    const id = await ctx.service.gridfs.put(Buffer.from(srcContent), 'gaiajs.test_content.txt', { conn: 'gfs' });
     assert(id, 'should put');
 
-    const reader = await ctx.service.gridfs.get(id, { conn: 'gridfs' });
+    const reader = await ctx.service.gridfs.get(id, { conn: 'gfs' });
 
     const content = await new Promise((resolve, reject) => {
       let buffer = '';
@@ -31,6 +31,6 @@ tester('test/services/gridfs.test.ts', async it => {
 
     assert(content === srcContent);
 
-    await ctx.service.gridfs.remove(id, { conn: 'gridfs' });
+    await ctx.service.gridfs.remove(id, { conn: 'gfs' });
   });
 });

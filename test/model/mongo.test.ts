@@ -128,7 +128,8 @@ tester(__filename, async it => {
 
     const objects = await ctx.service.model.mongoTest.loadMultiWithFieldStr(123 as any);
 
-    assert(objects.length > 0, 'should load');
+    // 类型不匹配的数据应该查不出来，不支持类型自动转换
+    assert(objects.length === 0, 'should not load');
 
     const obj2 = await ctx.service.model.mongoTest.updateOneByNumberField({ field_str: '321' }, 123);
     assert(obj2 && obj2._id.toHexString() === obj._id.toHexString() && obj2.field_str === '321');

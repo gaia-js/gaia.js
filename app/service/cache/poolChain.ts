@@ -13,7 +13,7 @@ export default class CachePoolChain extends Service {
   constructor(ctx: Context) {
     super(ctx);
 
-    this.cachePool = [ ctx.service.cache.runtime as any, ctx.service.cache.couchbase as any ];
+    this.cachePool = [ ctx.service.cache.runtime as any, ctx.service.cache[ (ctx.app.config.cache && ctx.app.config.cache.type) || 'couchbase'] as any ];
   }
 
   async load<T = any, KT = KeyType>(id: KT, missedCallback: ((key: KT) => Promise<T>) | undefined, options: CachePoolChainLoadOptions<T> = {}): Promise<T> {
@@ -82,10 +82,12 @@ export default class CachePoolChain extends Service {
     await Promise.all(this.cachePool.map(cache => cache.remove((options && options.prefix || '') + id, options)));
   }
 
+  // tslint:disable-next-line: no-reserved-keywords
   async get<KT = KeyType>(key: KT, options: CachePoolChainLoadOptions = {}): Promise<any> {
     return await this.load(key, undefined, options);
   }
 
+  // tslint:disable-next-line: no-reserved-keywords
   async set<KT = KeyType>(key: KT, value: any, options: CachePoolChainLoadOptions = {}): Promise<void> {
     if (options.skipCache && options.skipRuntimeCache) {
       return;
