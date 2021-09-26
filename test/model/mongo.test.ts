@@ -1,6 +1,6 @@
 // tslint:disable: max-func-body-length
 import { gaiaTester as tester } from '../bootstrap';
-import { ObjectID, MongoError } from 'mongodb';
+import { ObjectID } from 'mongodb';
 import { isNull } from 'lodash';
 import * as assert from 'assert';
 import MongoTestObject from '../fixtures/app/object/mongo_test';
@@ -52,7 +52,8 @@ tester(__filename, async it => {
       await ctx.service.model.mongoTest.create(obj!.getProperties());
       assert(false, 'should not create while created already');
     } catch (err) {
-      assert(err instanceof MongoError && err.code === 11000, 'create while already exists');
+      //assert(err instanceof MongoError && err.code === 11000, 'create while already exists');
+      assert(err instanceof Error && err.name === 'MongoError' && (err as any).code === 11000, 'create while already exists');
     }
 
     await ctx.service.model.mongoTest.modify(obj as MongoTestObject, { $set: { 'field_map.k2': 'v2' } });
