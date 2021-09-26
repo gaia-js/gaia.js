@@ -1,7 +1,6 @@
 // tslint:disable: max-func-body-length
 import { gaiaTester as tester } from '../bootstrap';
-import * as mongodb from 'mongodb';
-import { ObjectID } from 'mongodb';
+import { ObjectID, MongoError } from 'mongodb';
 import { isNull } from 'lodash';
 import * as assert from 'assert';
 import MongoTestObject from '../fixtures/app/object/mongo_test';
@@ -53,7 +52,7 @@ tester(__filename, async it => {
       await ctx.service.model.mongoTest.create(obj!.getProperties());
       assert(false, 'should not create while created already');
     } catch (err) {
-      assert(err instanceof mongodb.MongoError && err.code === 11000, 'create while already exists');
+      assert(err instanceof MongoError && err.code === 11000, 'create while already exists');
     }
 
     await ctx.service.model.mongoTest.modify(obj as MongoTestObject, { $set: { 'field_map.k2': 'v2' } });
@@ -128,7 +127,7 @@ tester(__filename, async it => {
 
     const objects = await ctx.service.model.mongoTest.loadMultiWithFieldStr(123 as any);
 
-    // 类型不匹配的数据应该查不出来，不支持类型自动转换
+    // 类型不匹配的数据应该查不出来，不支持类型自动转换；loadMultiWith的key也是不一样的
     assert(objects.length === 0, 'should not load');
 
     const obj2 = await ctx.service.model.mongoTest.updateOneByNumberField({ field_str: '321' }, 123);

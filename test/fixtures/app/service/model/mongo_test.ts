@@ -18,6 +18,8 @@ export default class MongoTestServiceModel extends MongoModelService<MongoTestOb
     this.registerLoadMultiWith([ 'field_str' ]);
     this.registerCountWith([ 'field_str' ]);
 
+    this.registerLoadMultiWith([ 'field_number' ]);
+
     // for test
     this.registerLoadMultiWith([ { field_number: 1 } ]);
     this.registerLoadMultiWith({ field_number: 2 });
