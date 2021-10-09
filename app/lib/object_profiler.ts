@@ -50,19 +50,38 @@ export default class ObjectProfiler<T extends object> {
   }
 
   // tslint:disable-next-line: function-name
-  static createProfileProxy<T extends object>(target: T, itemName: string, tags: { [key: string]: string }, ctx: Context, options?: { timeout?: number, methods?: string[]} ): T {
+  static createProfileProxy<T extends object>(target: T, itemName?: string, tags?: { [key: string]: string }, ctx?: Context, options?: { timeout?: number; methods?: string[]; excludes?: string[] }): T {
     return new Proxy(target, {
       // tslint:disable-next-line: no-reserved-keywords
       get(target: T, propKey: string) {
-        if (typeof target[propKey] === 'function' && (!options || !options.methods || options.methods.indexOf(propKey) !== -1)) {
+        if (typeof target[propKey] === 'function'
+          && (!options || !options.methods || options.methods.includes(propKey))
+          && (!options || !options.excludes || !options.excludes.includes(propKey))) {
           // tslint:disable-next-line: no-function-expression
           return function(...params: any) {
-            const result = target[ propKey ](...params);
-            if (result && result.then && result.catch) {
-              return ObjectProfiler.promise(result, itemName, {...(tags || {}),  operator: propKey}, { ...options, ctx });
+            if (!itemName) {
+              itemName = target.constructor.name;
             }
 
-            return result;
+            tags = { ...(tags || {}), operator: propKey };
+
+            const profileItem = ctx ? ctx.service.profiler.createItem(itemName, tags) : new Item(itemName, tags);
+            try {
+              return target[ propKey ].apply(target, params);
+            } catch (err) {
+              profileItem.addTag('error', err instanceof Error ? err.name : 'error');
+              throw err;
+            } finally {
+              if (profileItem.last() > (options && options.timeout || 100)) {
+                profileItem.addTag('timeout', 'timeout');
+              }
+
+              if (ctx) {
+                ctx && ctx.service.profiler.addItem(profileItem);
+              } else {
+                getRheaClient()?.addItem(profileItem);
+              }
+            }
           };
         }
 

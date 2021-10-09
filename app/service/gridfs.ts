@@ -8,13 +8,14 @@ import { randomString } from '../lib/string';
 import { MongooseSingleton } from 'egg';
 import { Connection } from 'mongoose';
 import { ServerError } from '../errors';
+import method from '../lib/profiler/method';
 
 export default class GridFSService extends BaseService {
   private async getClient(dbName?: string, conn?: string) {
     const mongooseDB = (this.app as any).mongooseDB as MongooseSingleton | Connection;
 
     if (!mongooseDB) {
-      throw new ServerError({ msg: '系统错误' })
+      throw new ServerError({ msg: '系统错误' });
     }
 
     if (!conn && mongooseDB && (mongooseDB as MongooseSingleton).clients) {
@@ -27,6 +28,7 @@ export default class GridFSService extends BaseService {
     return new mongodb.GridFSBucket(db.db as any);
   }
 
+  @method('gridfs', { operator: 'put' })
   async put(filePath: string | Buffer | Readable, fileName?: string, options?: Partial<{ conn?: string; db?: string; mime: string; headers?: object }>) {
     const client = await this.getClient(options && options.db, options && options.conn);
 
@@ -74,16 +76,18 @@ export default class GridFSService extends BaseService {
     return gfsStream.id as mongodb.ObjectId;
   }
 
+  // tslint:disable-next-line: no-reserved-keywords
   async get(id: mongodb.ObjectId, options?: Partial<{ conn?: string; db?: string }>) {
     const client = await this.getClient(options && options.db, options && options.conn);
 
     return client.openDownloadStream(id);
   }
 
+  @method('gridfs', { operator: 'remove' })
   async remove(id: mongodb.ObjectId, options?: Partial<{ conn?: string; db?: string }>) {
     const client = await this.getClient(options && options.db, options && options.conn);
 
-    return await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       client.delete(id, err => {
         if (err) {
           reject(err);
