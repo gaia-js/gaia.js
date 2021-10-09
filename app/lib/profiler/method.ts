@@ -6,15 +6,16 @@ export default function method<T extends { new(...args: any[]): {} } = any>(name
   return (target: T, propertyKey: string, descriptor: PropertyDescriptor) => {
     const oldValue: Function = target[propertyKey];
 
-    descriptor.value = (...params: any[]) => {
-      const ctx: Context | undefined = (target as any).ctx as Context;
-      const itemName = name || target.constructor.name;
+    // tslint:disable-next-line: no-function-expression
+    descriptor.value = function (...params: any[]) {
+      const ctx: Context | undefined = ((this || target) as any).ctx as Context;
+      const itemName = name || (this || target).constructor.name;
       tags = { ...(tags || {}), operator: propertyKey };
 
       const profileItem = ctx ? ctx.service.profiler.createItem(itemName, tags) : new Item(itemName, tags);
 
       try {
-        return oldValue.apply(target, params);
+        return oldValue.apply((this || target), params);
       } catch (err) {
         profileItem.addTag('error', err instanceof Error ? err.name : 'error');
         throw err;
