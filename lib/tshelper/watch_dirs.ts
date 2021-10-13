@@ -30,6 +30,22 @@ export function gaiaAppDefault(rootDir: string) {
   return watchDirs;
 }
 
+export function gaiaPluginDefault(rootDir: string, interfacePrefix = "IGaia") {
+  return {
+    service: {
+      directory: `${rootDir}/app/service`,
+      generator: generators.gaiaService,
+      interfacePrefix,
+    },
+    object: {
+      directory: `${rootDir}/app/object`,
+      generator: generators.gaiaObject,
+      interfacePrefix,
+    },
+  };
+}
+
 export default {
   gaiaApp: gaiaAppDefault,
+  gaiaPlugin: gaiaPluginDefault,
 };
