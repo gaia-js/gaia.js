@@ -96,7 +96,7 @@ export default class AliOssService extends BaseService {
 
       return false;
     } catch (err) {
-      if (err.status === 404) {
+      if ((err as any).status === 404) {
         return false;
       }
 
