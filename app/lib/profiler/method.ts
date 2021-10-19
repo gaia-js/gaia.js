@@ -2,7 +2,7 @@ import { Context } from 'egg';
 import { Item } from 'rhea-cli';
 import { getRheaClient } from 'rhea-cli/lib/rhea_cli';
 
-export default function method<T extends { new(...args: any[]): {} } = any>(name?: string, tags?: { [K: string]: string }, options?: { timeout?: number }) {
+export default function methodProfile<T extends { new(...args: any[]): {} } = any>(name?: string, tags?: { [K: string]: string }, options?: { timeout?: number }) {
   return (target: T, propertyKey: string, descriptor: PropertyDescriptor) => {
     const oldValue: Function = target[propertyKey];
 
