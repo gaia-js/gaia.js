@@ -82,20 +82,7 @@ export async function readToFile(stream: Readable, filePath: string) {
 }
 
 export function bufferReadStream(buffer: Buffer | string): Readable {
-  const stream = new (class extends Readable {
-    readAlready: boolean = false;
-
-    _read() {
-      if (this.readAlready) {
-        return;
-      }
-
-      this.readAlready = true;
-      stream.push(buffer);
-    }
-  })();
-
-  return stream;
+  return Readable.from([ buffer ]);
 }
 
 export function bufferWriteStream(): Writable & { buffer: Buffer } {
