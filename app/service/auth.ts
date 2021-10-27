@@ -53,8 +53,8 @@ export default class AuthService extends BaseService {
       }
 
       return matched.slice(2);
-    } catch (err: any) {
-      this.ctx.logError({ msg: 'validate token failed', detail: { token } }, err);
+    } catch (err) {
+      this.ctx.logError({ msg: 'validate token failed', err, detail: { token } });
 
       return null;
     }
